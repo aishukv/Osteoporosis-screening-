@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Osteoporosis Detection</title>
+    <style>
+        body {
+            background-color: #f4f9ff;
+            font-family: 'Segoe UI', sans-serif;
+            text-align: center;
+            padding: 20px;
+            color: #003366;
+        }
+        h1 {
+            color: #003366;
+            margin-bottom: 10px;
+        }
+        .upload-box {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            display: inline-block;
+        }
+        input[type="file"], button {
+            margin: 10px;
+            padding: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+        .btn {
+            background-color: #003366;
+            color: white;
+            cursor: pointer;
+        }
+        .btn:hover {
+            background-color: #00509e;
+        }
+        #spinner {
+            display: none;
+        }
+        .output-section {
+            margin-top: 20px;
+        }
+        .awareness {
+            margin-top: 40px;
+            background-color: #e8f0ff;
+            padding: 20px;
+            border-radius: 10px;
+            color: #333;
+        }
+    </style>
+    <script>
+        function showSpinner() {
+            document.getElementById("spinner").style.display = "inline-block";
+        }
+
+        function downloadImage() {
+            const imageData = document.getElementById("result-img").src;
+            const form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/download-image";
+            form.style.display = "none";
+
+            const input = document.createElement("input");
+            input.type = "hidden";
+            input.name = "image_data";
+            input.value = imageData;
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+</head>
+<body>
+    <h1>Osteoporosis Detection</h1>
+    <div class="upload-box">
+        <form action="/detect" method="post" enctype="multipart/form-data" onsubmit="showSpinner()">
+            <input type="file" name="image" accept="image/*" required><br>
+            <button type="submit" class="btn">Detect</button>
+        </form>
+        <div id="spinner">🔍 Detecting...</div>
+    </div>
+
+    {% if result_img %}
+    <div class="output-section">
+        <h2>Detection Result</h2>
+        <img id="result-img" src="data:image/jpeg;base64,{{ result_img }}" width="400"><br><br>
+        <p><strong>Prediction:</strong> {{ prediction }}</p>
+        <p><strong>Confidence:</strong> {{ confidence }}%</p>
+        <button class="btn" onclick="downloadImage()">Download Image</button>
+    </div>
+    {% endif %}
+
+    <div class="awareness">
+        <h2>🦴 Osteoporosis Awareness</h2>
+        <p>Osteoporosis is a condition where bones become weak and brittle. Early detection can prevent serious fractures.</p>
+        <p>Maintain a healthy lifestyle with calcium-rich foods, vitamin D, and regular exercise to keep your bones strong!</p>
+    </div>
+
+    <footer style="margin-top: 40px;">
+        <p>Made with ❤️ by Aishwarya Kannan</p>
+    </footer>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
